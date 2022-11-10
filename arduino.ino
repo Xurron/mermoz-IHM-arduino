@@ -1,35 +1,26 @@
-byte x = 40;
-byte servoPin = 9;
+#include "Servo.h"
+
+Servo FS90;
+Servo FS90R;
+
+byte FS90_pin = 9;
+byte FS90R_pin = 10;
 
 void setup() {
-  pinMode(servoPin, OUTPUT);
+  FS90.attach(FS90_pin, 544, 2400);
+  FS90R.attach(FS90R_pin, 544, 2400);
 }
 
 void loop() {
-  for(byte n = 0; n < x; n++) {
-    digitalWrite(servoPin, HIGH);
-    delay(1);
-    digitalWrite(servoPin, LOW);
-    delay(19);
-  }
+  FS90.write(0);
+  FS90R.write(180);
+  delay(1000 * 2);
 
-  delay(2000);
+  FS90.write(90);
+  FS90R.write(90);
+  delay(1000 * 2);
 
-  for(byte n = 0; n < x; n++) {
-    digitalWrite(servoPin, HIGH);
-    delayMicroseconds(1500);
-    digitalWrite(servoPin, LOW);
-    delayMicroseconds(18500);
-  }
-
-  delay(2000);
-
-  for(byte n = 0; n < x; n++) {
-    digitalWrite(servoPin, HIGH);
-    delay(2);
-    digitalWrite(servoPin, LOW);
-    delay(18);
-  }
-
-  delay(2000);
+  FS90.write(180);
+  FS90R.write(0);
+  delay(1000 * 2);
 }
