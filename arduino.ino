@@ -7,8 +7,8 @@ byte FS90_pin = 9;
 byte FS90R_pin = 10;
 
 void setup() {
-  FS90.attach(FS90_pin, 544, 2400);
-  FS90R.attach(FS90R_pin, 544, 2400);
+  FS90.attach(FS90_pin, 900, 2100);
+  FS90R.attach(FS90R_pin, 700, 2300);
 }
 
 void loop() {
