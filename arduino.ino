@@ -19,7 +19,8 @@ void loop() {
     Serial.print("Code ascii envoyé :");
     Serial.print(incoming);
     Serial.println();
-    if(incoming == 118) {
+    switch(incoming) {
+      case 118:
       FS90.write(0);
       FS90R.write(180);
       Serial.print("FS90 : Angle mini");
@@ -27,9 +28,9 @@ void loop() {
       Serial.print("FS90R : Vitesse maxi horaire");
       Serial.println();
       Serial.println();
-      //delay(1000 * 2);
-    }
-    else if(incoming == 98) {
+      break;
+
+      case 98:
       FS90.write(90);
       FS90R.write(90);
       Serial.print("FS90 : Angle moyen");
@@ -37,9 +38,9 @@ void loop() {
       Serial.print("FS90R : Arrêt");
       Serial.println();
       Serial.println();
-      //delay(1000 * 2);
-    }
-    else if(incoming == 110) {
+      break;
+    
+      case 110:
       FS90.write(180);
       FS90R.write(0);
       Serial.print("FS90 : Angle maxi");
@@ -47,9 +48,11 @@ void loop() {
       Serial.print("FS90R : Vitesse maxi anti-horaire");
       Serial.println();
       Serial.println();
-      //delay(1000 * 2);
-    }else {
+      break;
+      
+      default:
       Serial.println("Erreur de code");
+      break;
     }
   }
 }
