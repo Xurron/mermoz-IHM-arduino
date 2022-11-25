@@ -6,6 +6,8 @@ Servo FS90R;
 byte FS90_pin = 9;
 byte FS90R_pin = 10;
 byte incoming;
+byte vitesse = 0;
+bool marche_arret = 0;
 
 void setup() {
   FS90.attach(FS90_pin, 500, 2500);
@@ -16,37 +18,31 @@ void setup() {
 void loop() {
   while(Serial.available() > 0) {
     incoming = Serial.read();
-    Serial.println("Code ascii envoyé :");
-    Serial.println(incoming);
-    Serial.println();
     switch(incoming) {
       case 118:
-      FS90.write(0);
-      write360(1, 100);
-      Serial.println("FS90 : Angle mini");
-      Serial.println("FS90R : Vitesse maxi horaire");
-      Serial.println();
+      vitesse = ++vitesse;
       break;
 
       case 98:
-      FS90.write(90);
-      write360(0, 0);
-      Serial.println("FS90 : Angle moyen");
-      Serial.println("FS90R : Arrêt");
-      Serial.println();
+      if(marche_arret) {
+        marche_arret = 0;
+      } else {
+        marche_arret = 1;
+      }
       break;
     
       case 110:
-      FS90.write(180);
-      write360(0, 100);
-      Serial.println("FS90 : Angle maxi");
-      Serial.println("FS90R : Vitesse maxi anti-horaire");
-      Serial.println();
+      vitesse = vitesse - 1;
       break;
       
       default:
-      Serial.println("Erreur de code");
       break;
+    }
+    if(marche_arret) {
+      FS90.write(vitesse);
+      write360(1, vitesse);
+    } else {
+      write360(0, vitesse);
     }
   }
 }
