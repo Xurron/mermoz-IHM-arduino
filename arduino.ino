@@ -5,9 +5,18 @@ Servo FS90R;
 
 byte FS90_pin = 9;
 byte FS90R_pin = 10;
-byte incoming;
+String incoming;
 byte vitesse = 0;
 bool marche_arret = 0;
+String testS;
+String testV;
+String testA;
+String S;
+String V;
+String A;
+int S_int;
+int V_int;
+int A_int;
 
 void setup() {
   FS90.attach(FS90_pin, 500, 2500);
@@ -17,32 +26,29 @@ void setup() {
 
 void loop() {
   while(Serial.available() > 0) {
-    incoming = Serial.read();
-    switch(incoming) {
-      case 118:
-      vitesse = ++vitesse;
-      break;
-
-      case 98:
-      if(marche_arret) {
-        marche_arret = 0;
-      } else {
-        marche_arret = 1;
-      }
-      break;
-    
-      case 110:
-      vitesse = vitesse - 1;
-      break;
-      
-      default:
-      break;
+    incoming = Serial.readStringUntil("\n");
+    //S1V012A012
+    testS = incoming.substring(0, 1);
+    testV = incoming.substring(2, 3);
+    testA = incoming.substring(6, 7);
+    if(testS == "S") {
+      S = incoming.substring(1, 2);
     }
-    if(marche_arret) {
-      FS90.write(vitesse);
-      write360(1, vitesse);
-    } else {
-      write360(0, vitesse);
+    if(testV == "V") {
+      V = incoming.substring(3, 6);
+      int V_int = V.toInt();
+      if(V_int > 100) return;
+      if(S == "1") {
+        write360(1, V_int);
+      } else {
+        write360(0, V_int);
+      }
+    }
+    if(testA == "A") {
+      A = incoming.substring(7, 10);
+      int A_int = A.toInt();
+      if(A_int > 180) return;
+      FS90.write(A_int);
     }
   }
 }
